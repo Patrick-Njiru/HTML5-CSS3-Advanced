@@ -1,0 +1,155 @@
+/* 1 - SPECIFICITY */
+/* 
+    When you select same elements and apply different styles, 
+    the style with the higher specificity wins. However, 
+    if they both have the same level of specificity, the style that
+    comes last is used since CSS read from top to bottom.
+    
+    Hover over a selector to view its specificity in the pop-up
+*/
+/*TAG specificity (0,0,1) = 1 */
+p { color: blue ; } 
+
+/* specificity (0,0,1) = 1 */
+div { color: red; } 
+
+/*TAG+TAG specificity (0,0,2) = 2 */
+div p { color: red; } 
+
+/*TAG+TAG+TAG+TAG specificity (0,0,4) = 4 */
+body header div p { color: red; } 
+
+/*ID - specificity (1,0,0) = 100*/
+#p {color: orange;} 
+
+/*CLASS - specificity (0,1,0) = 10*/
+.p-first { color: yellow;} 
+
+/* ID+ClASS (1,1,0) = 110*/
+#p.p-first { background: green; } 
+
+/* ID+CLASS+TAG specificity (1,1,1) = 111*/
+#p.p-first p { background: blue; } 
+
+/* ID+CLASS+TAG+TAG specificity (1,1,2) = 112*/
+#p .p-first div p { background: indigo; } 
+
+/* Pseudo-child-selector specificity (0,1,1) = 11*/
+p:first-child {color: violet;} 
+
+
+
+/* 2 - BOX MODEL */
+/* 
+   Refers to how you display an element and it's properties on the screen.
+   
+   The element's innermost box (content box) is determined by the width and height properties, followed by the padding box, the border box and finally the margin box.
+
+   Offset-width = width + left and right padding + left and right margin + left and right border-width
+
+   Offset-height = height + top and bottom padding + top and bottom margin + top and bottom border-width
+
+*/
+/* 
+    The box-sizing: border-box property ensures that the offset-width and height do not exceed the width and height properties specified. 
+
+    With this property, the size of the content box adjusts to fit the padding, margin and border boxes. 
+*/
+* { box-sizing: border-box;}
+
+div {
+    border: 1em solid aqua;
+    padding: 5px 10px;
+    margin: 2rem;
+    width: 70vw; /* 70% of the screen width */
+    height: 50vh;
+}
+
+
+
+/* 3 - VARIABLES */
+/* 
+    You can create variables in CSS3. These is done in the properties section. 
+
+    Once created, the variable can only be used on the selected element and it's children. It is scoped.
+
+    The variable is usually given a name that is similar to what it should do or represent
+
+    One advanyage of using variables is that when you need to change the value of a certain property throughout the entire website, you only change it at one point in CSS - where you defined it
+*/
+
+:root { /* Global variable - alternatives selector is 'html' */
+    --bgcolor: green;
+}
+/* Call it as follows */
+body { background: var(--bgcolor); }
+
+/* 
+    You can specifiy a default fallback value in case the variable is not defined.
+
+    If the variable value is invalid, the fallback option will not be called.
+*/
+
+div { background-color: var(--bgcolor, greenyellow); }
+
+
+
+/* 4 - CALC() */
+/* Allows you to access the values of variables and have computations */
+
+/* You can make various size properties dynamic as the screen size changes */
+h1 { font-size: calc(32px + 5vw) } /* use different value, eg px + vw*/
+
+/* Using Calc() with variables */
+/* Ensure to leave spaces between values when using calc to avoid errors (especially with addition and subtraction) */
+
+html {
+    --standard-font-size: 20px;
+    --h1-font-size: calc(var(--standard-font-size) * 2); /* 40px */
+    --p-font-size: calc(var(--standard-font-size) + 4px);
+    --divpadding: 20px
+}
+
+body {
+    background: var(--bgcolor);
+    font-size: var(--p-font-size);
+}
+
+.somediv { 
+    padding: var(--divpadding);
+    background: var(--bgdiv, red); /* --bgdiv is not defined. red will be used.*/
+}
+
+
+
+/* 4 - PSEUDO-SELECTORS */
+/* To view a list of al pseudo-selectors, type : - colon */
+
+p:hover { /* active, focus */
+    font-weight: bold;
+    font-style: oblique; 
+}
+
+#banner { display: none; }
+
+input:focus + #banner { /* banner becomes visible when you focus on the input field */
+    display: block; 
+}
+
+body p:nth-child(3) { /* Select the third p that is a child of body */
+    font-size: calc(var(--standard-font-size) - 3px);
+}
+
+/* Select all even p children of body. For odd children use 2n-1 or 2n+1 */
+body p:nth-child(2n) { /* first-child, last-child  */ 
+    font-size: calc(var(--standard-font-size) - 3px);
+}
+
+
+
+/* OTHER TIPS */
+/* 
+    p + div {} - select the div(s) that is a sibling of p
+
+    ul > li {} - select 'immediate' children of ul. So any 'li' that is a child of ul but also a child of another element like 'div' wont be selected
+*/
