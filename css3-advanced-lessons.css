@@ -38,7 +38,7 @@ body header div p { color: red; }
 p:first-child {color: violet;} 
 
 
-
+/*******************************************************/
 /* 2 - BOX MODEL */
 /* 
    Refers to how you display an element and it's properties on the screen.
@@ -66,7 +66,7 @@ div {
 }
 
 
-
+/*******************************************************/
 /* 3 - VARIABLES */
 /* 
     You can create variables in CSS3. These is done in the properties section. 
@@ -93,7 +93,7 @@ body { background: var(--bgcolor); }
 div { background-color: var(--bgcolor, greenyellow); }
 
 
-
+/*******************************************************/
 /* 4 - CALC() */
 /* Allows you to access the values of variables and have computations */
 
@@ -121,8 +121,8 @@ body {
 }
 
 
-
-/* 4 - PSEUDO-SELECTORS */
+/*******************************************************/
+/* 5 - PSEUDO-SELECTORS */
 /* To view a list of al pseudo-selectors, type : - colon */
 
 p:hover { /* active, focus */
@@ -136,20 +136,148 @@ input:focus + #banner { /* banner becomes visible when you focus on the input fi
     display: block; 
 }
 
+/* first-child, last-child, nth-child  */
 body p:nth-child(3) { /* Select the third p that is a child of body */
     font-size: calc(var(--standard-font-size) - 3px);
 }
 
-/* Select all even p children of body. For odd children use 2n-1 or 2n+1 */
-body p:nth-child(2n) { /* first-child, last-child  */ 
+body p:nth-child(2n) {  /* all even ps */
     font-size: calc(var(--standard-font-size) - 3px);
 }
 
+body p:nth-child(2n-1) {  /* all odd ps */
+    font-size: calc(var(--standard-font-size) - 3px);
+}
+
+input:enabled + #banner { /* Assuming the input can be enabled and disabled */
+    display: none;
+}
+
+/* try others */
 
 
-/* OTHER TIPS */
+/*******************************************************/
+/* 6 - PSEUDO-ELEMENTS */
 /* 
-    p + div {} - select the div(s) that is a sibling of p
-
-    ul > li {} - select 'immediate' children of ul. So any 'li' that is a child of ul but also a child of another element like 'div' wont be selected
+    Does not work with self-closing/empty elements like img, hr, br, input
+    they are symbolized by double colon - ::
 */
+
+/* Adding content to already existing content in the selected element. ::before adds at the beginning and ::after at the end */
+#banner::before {
+    content: 'hello World!'; /* must have the content property - whose value must be a string - to be visible */
+}
+
+#banner::after { content: 'Hello World!'; }
+
+/* change properties of the first letter in the element */
+#banner::first-letter { 
+    text-transform: lowercase;
+    color: red;
+}
+
+/* Adding pseudo-selectors to pseudo-elements */
+/* You must start with the pseudo-selector followed by the pseudo-element */
+
+#banner:hover::before { 
+    color: #fff;
+    background: #000;
+    text-transform: uppercase;
+}
+
+/* to create an empty vertical space at the beggining of an element with a given height. common */
+body::before {
+    display: block;
+    content: '';
+    height: '50px';
+}
+
+
+/*******************************************************/
+/* 7 - ATTR - ATTRIBUTE FUNCTION */
+/* 
+    Returns the value of the attribute whose name is indicated in the selected element.
+    It can be any attribute ranging from standard attributes like id,class to any other that you create
+*/
+/* example in HTML - <div id='section1' ending='Thank you for your time!'>...</div> . Then... */
+#section1::before {
+    content: attr(ending); /* = 'Thank you for... */
+    color: gold;
+    background: #000;
+}
+
+/*******************************************************/
+/* !IMPORTANT */
+/* 
+    !important implies that the selected element should have the value of this style given the first priority even if it styled differently elsewhere 
+*/
+p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2rem !important; 
+}
+
+
+/*******************************************************/
+/* 8 - ADVANCED SELECTORS */
+
+/* SIBLING SELECTOR */
+/* siblings are elements with the same order of hierarchy in HTML */
+
+/* Immediate Sibling Selector */
+h1 + p { font-weight: 600;} /* the p sibling that is right after h1 in HTML */
+
+/* 
+    if we have:
+    <h1>...</h1>
+    <div>...</div>
+    <p>...</p>
+    the style above will not apply since p is not the immediate sibling of h1, div is.
+*/
+
+/* All Siblings Selector  */
+ h1 ~ p { font-weight: bolder; } /* all ps that are siblings of h1 */
+
+
+/* Direct Child Selector - > */
+/* The styles won't apply to h1 tags that are children other tags that are children of div#one */
+div#one > h1 { background-blend-mode: color-dodge; }
+
+
+/* ASTERICK/STAR SELECTOR - * */
+/* 
+    The asterick/star sign '*' indicates every single element on the page or all children of a given parent.  
+*/
+
+/* apply to the section element. Some properties may be inheritted by its children unless given a different value */
+section { color: yellow; }
+
+/* apply  to all children of section element regardless of their previous properties' values. It may only fail to apply to certain children due to specificity reasons or use of !important */
+section * { color: yellow; }
+
+
+/* ATTRIBUTE SELECTORS */
+
+/*  tag[attribute = value] - attribute with a specific value*/
+ul li[name='email'] { /* li with attribute name whose value is 'email' */
+    display: inline; 
+    list-style-type: lower-roman;    
+}
+
+/*  tag[attribute] - all elements with the given attribute regardless of their values. */
+button[title] { padding: 5px; }
+
+/* tag[attribute*='value'] - all elements whose selcted attribute starts with the given value. The value can be a letter(s) or word*/
+button[title*='red'] { padding: 5px; }
+
+/* tag[attribute$='value'] - all elements whose selcted attribute end with the given value. The value can be a letter(s) or word */
+button[title*='d'] { padding: 5px; }
+
+
+
+/*  THE :NOT() SELECTOR */
+/* Select specific elements without the provided attribute */
+div:not([id]) { height: auto; }
+div:not([id='section']) { height: auto; }
+
+/* ps that don't have the class value last */
+p:not(.last) { box-sizing: border-box; }
